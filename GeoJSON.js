@@ -1,12 +1,11 @@
 window.GeoJSON = function(settings){
 
 	var _versionInfo = {
-		title: 'GeoJSON',
-		version: '1',
-		created: 'Dan Palmer',
-		website: 'http://www.telegraph.co.uk - http://www.thisiscave.co.uk'
-	};
-	var tmpProperties = {},
+			title: 'GeoJSON',
+			version: '1.1',
+			created: 'Dan Palmer'
+		},
+		tmpProperties = {},
 		tmpIndex = 0;
 	
 	
@@ -23,7 +22,7 @@ window.GeoJSON = function(settings){
 		};								
 		this.show = function(){								//Shows all the shape overlays
 			for(var a in this.shapes){
-				this.shapes[a].setMap(settings.mapElement);
+				this.shapes[a].setMap(settings.googleMap);
 			}
 		};							
 		this.remove = function(){							//Hides and deletes all the shape overlays
@@ -45,7 +44,7 @@ window.GeoJSON = function(settings){
 	
 	settings = settings || {};															//In case user hasn't defined anything
 	settings = {
-		mapElement: settings.mapElement || null,										//The target map
+		googleMap: settings.googleMap || null,										//The target map
 		JSONSrc: settings.JSONSrc || {},												//The JSON src
 		polygonOptionsCallback: settings.polygonOptionsCallback || function(){},		//Callback for changing polygon styles
 		polygonEventsCallback: settings.polygonEventsCallback || function(){},			//Callback for adding events to polygons
@@ -53,12 +52,14 @@ window.GeoJSON = function(settings){
 		pointEventsCallback: settings.pointEventsCallback || function(){},				//Callback for adding events to points
 		linestringOptionsCallback: settings.linestringOptionsCallback || function(){},	//Callback for changing linestring styles
 		linestringEventsCallback: settings.linestringEventsCallback || function(){},	//Callback for adding events to linestrings
-		onError: settings.onError || function(){}										//Error callback
+		onError: settings.onError || function(index,message){							//Error callback
+			alert('Error: '+message);
+		}										
 	};
 
-	if(settings.mapElement===null){
-		alert("Message from "+_versionInfo.title+":\nNo map element declared");
-		return;
+	if(settings.googleMap===null){
+		settings.onError(-1,'No map element declared');
+		return {};
 	}
 
 	
@@ -174,7 +175,7 @@ window.GeoJSON = function(settings){
 		};
 	
 		var tmpPoint = new google.maps.Marker({
-			map: settings.mapElement,
+			map: settings.googleMap,
 			position: new google.maps.LatLng(json[1],json[0]),
 			icon: defaults.icon,
 			shadow: defaults.shadow,
@@ -209,7 +210,7 @@ window.GeoJSON = function(settings){
 			strokeWeight: defaults.strokeWeight
 		});
 		
-		linestringObj.setMap(settings.mapElement);
+		linestringObj.setMap(settings.googleMap);
 		
 		settings.linestringEventsCallback(linestringObj,tmpIndex,defaults,tmpProperties);
 		
@@ -247,7 +248,7 @@ window.GeoJSON = function(settings){
 		});
 		
 		
-		polygonObj.setMap(settings.mapElement);	
+		polygonObj.setMap(settings.googleMap);	
 		settings.polygonEventsCallback(polygonObj,tmpIndex,defaults,tmpProperties);
 		
 		return polygonObj;
@@ -265,6 +266,27 @@ window.GeoJSON = function(settings){
 	
 	var outputArr = [];										//The output array storing all the GeoJSONObj
 	outputArr = _ParseFeatureType(settings.JSONSrc);		//Let's get the ball rolling!
-	return outputArr;
-
+	return {
+		shapes: outputArr,
+		hide: function(){
+			var a = this.shapes.length;
+			while(a--){
+				this.shapes[a].hide();
+			}
+		},
+		show: function(){
+			var a = this.shapes.length;
+			while(a--){
+				this.shapes[a].show();
+			}
+		},
+		remove: function(){
+			var a = this.shapes.length;
+			while(a--){
+				this.shapes[a].remove();
+			}
+			this.shapes = [];
+		}
+	};
+	
 };

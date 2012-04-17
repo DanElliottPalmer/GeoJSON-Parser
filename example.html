@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>    <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>    <html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class=""> <!--<![endif]-->
+	<head>  
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="description" content="" />  
+		<meta name="keywords" content="" />
+		<meta name="robots" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
+		<script type="text/javascript" src="GeoJSON.js"></script>
+		<script type="text/javascript" src="americastates.js"></script>
+	</head>
+	<body>
+		<div id="map" style="width:600px;height:500px;"></div>
+		<script>
+			//Start up our map
+			var mapElm = document.getElementById('map'),
+				map = new google.maps.Map(mapElm,{
+					center: new google.maps.LatLng(49.031337,242.791827),
+			        zoom: 3,
+			        mapTypeId: google.maps.MapTypeId.ROADMAP
+				});
+		
+			var MapGeoJSON = GeoJSON({
+				googleMap: map,
+				JSONSrc: AmericaStates,
+				polygonOptionsCallback: function(props){
+					var styles = {
+						fillColor: '#51D111',
+						strokeColor: '#51D111',
+						strokeWeight: 0.5
+					};
+					return styles;
+				},
+				polygonEventsCallback: function(polygonpiece,index,styles,props){
+					google.maps.event.addListener(polygonpiece,'mousemove',function(){
+						polygonpiece.strokeWeight = 5;
+						if(props.NAME=="New York"){
+							polygonpiece.fillColor = "#F00";
+							polygonpiece.strokeWeight = 2;
+						}
+						polygonpiece.setMap(null);
+						polygonpiece.setMap(map);
+					});
+					google.maps.event.addListener(polygonpiece,'mouseout',function(){
+						polygonpiece.fillColor = styles.fillColor;
+						polygonpiece.strokeWeight = styles.strokeWeight;
+						polygonpiece.setMap(null);
+						polygonpiece.setMap(map);
+					});
+					google.maps.event.addListener(polygonpiece,'click',function(){
+						//MapGeoJSON[index].remove();
+						alert('State is '+props.NAME);
+					});
+				},
+				onError: function(index,message){
+					alert('Error: '+message);
+				}
+			});
+			
+		</script>
+	</body>
+</html>
