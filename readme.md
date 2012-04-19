@@ -113,4 +113,7 @@ why I put this in.
 If there are any problems feel free to message me on Git or email me - 
 danelliottpalmer@gmail.com and I'll to help if I can.
 
+Also! Look at [johan](https://github.com/johan/world.geo.json)'s geojson stash.
+Absolutely amazazing!
+
 Thank you please
