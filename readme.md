@@ -86,6 +86,16 @@ passed to the callback function are:
             elm.setMap(map);
         });
     }
+
+**NOTE:** I have added an extra method to Google's polygons, polylines and markers. This method is `update()`. This basically sets the map to null then sets it back to the original map. Hopefully it can save time on updating the styles.
+
+###Example 2
+    polygonEventsCallback: function(elm,ind,styles,props){
+        google.maps.event.addListener(elm,'click',function(){
+            elm.fillColor = "#0F0";
+            elm.update();
+        });
+    }
     
 ##The Glorious Returned Object
 Once you have used `GeoJSON`, it will return an object.

@@ -9,15 +9,17 @@
 		<meta name="description" content="" />  
 		<meta name="keywords" content="" />
 		<meta name="robots" content="" />
+		<script type="text/javascript" src="GeoJSON.js"></script>
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 		<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false"></script>
-		<script type="text/javascript" src="GeoJSON.js"></script>
+		
 		<script type="text/javascript" src="americastates.js"></script>
 	</head>
 	<body>
 		<div id="map" style="width:600px;height:500px;"></div>
 		<script>
 			//Start up our map
+			
 			var mapElm = document.getElementById('map'),
 				map = new google.maps.Map(mapElm,{
 					center: new google.maps.LatLng(49.031337,242.791827),
@@ -43,8 +45,7 @@
 							polygonpiece.fillColor = "#F00";
 							polygonpiece.strokeWeight = 2;
 						}
-						polygonpiece.setMap(null);
-						polygonpiece.setMap(map);
+						polygonpiece.update();
 					});
 					google.maps.event.addListener(polygonpiece,'mouseout',function(){
 						polygonpiece.fillColor = styles.fillColor;

@@ -1,5 +1,13 @@
 window.GeoJSON = function(settings){
-
+	
+	google.maps.Polygon.prototype.update = 
+	google.maps.Polyline.prototype.update = 
+	google.maps.Marker.prototype.update = function(){
+		var m = this.getMap();
+		this.setMap(null);
+		this.setMap(m);
+	};
+	
 	var _versionInfo = {
 			title: 'GeoJSON',
 			version: '1.1',
