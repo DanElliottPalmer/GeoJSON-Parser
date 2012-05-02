@@ -24,17 +24,20 @@ window.GeoJSON = function(settings){
 		this.prop = {}; 									//Stores all the properties from json
 		this.error = "";									//In case there is an error
 		this.hide = function(){								//Hides all the shape overlays
-			for(a in this.shapes){
+			var a = this.shapes.length;
+			while(a--){
 				this.shapes[a].setMap(null);
 			}
 		};								
 		this.show = function(){								//Shows all the shape overlays
-			for(var a in this.shapes){
+			var a = this.shapes.length;
+			while(a--){
 				this.shapes[a].setMap(settings.googleMap);
 			}
 		};							
 		this.remove = function(){							//Hides and deletes all the shape overlays
-			for(var a in this.shapes){
+			var a = this.shapes.length;
+			while(a--){
 				this.shapes[a].setMap(null);
 				google.maps.event.clearInstanceListeners(this.shapes[a]);
 			}
