@@ -42,7 +42,36 @@ window.GeoJSON = function(settings){
 				google.maps.event.clearInstanceListeners(this.shapes[a]);
 			}
 			this.shapes = [];
-		};							
+		};
+		this.getBounds = function(){
+			var	s = this.shapes,
+				l = s.length,
+				bounds = new google.maps.LatLngBounds();
+			while(l--){
+				if(s[l]._GJTYPE=="polygon"){
+					var pathsArray = s[l].getPaths().getArray(),
+						pathsArrayLen = pathsArray.length;
+					while(pathsArrayLen--){
+						var pathsArrayLen2 = pathsArray[pathsArrayLen].length;
+						while(pathsArrayLen2--){
+							bounds.extend(new google.maps.LatLng(pathsArray[pathsArrayLen].getAt(pathsArrayLen2).lat(),pathsArray[pathsArrayLen].getAt(pathsArrayLen2).lng()));
+						}
+					}
+				} else if(s[l]._GJTYPE=="line"){
+					var pathsArray = s[l].getPath().getArray(),
+						pathsArrayLen = pathsArray.length;
+					while(pathsArrayLen--){
+						var pathsArrayLen2 = pathsArray[pathsArrayLen].length;
+						while(pathsArrayLen2--){
+							bounds.extend(new google.maps.LatLng(pathsArray[pathsArrayLen].getAt(pathsArrayLen2).lat(),pathsArray[pathsArrayLen].getAt(pathsArrayLen2).lng()));
+						}
+					}
+				} else if(s[l]._GJTYPE=="marker"){
+					bounds.extend(s[l].getPosition());
+				}
+			}
+			return bounds;
+		};				
 	};
 
 	
@@ -190,7 +219,8 @@ window.GeoJSON = function(settings){
 			position: new google.maps.LatLng(json[1],json[0]),
 			icon: defaults.icon,
 			shadow: defaults.shadow,
-			title: defaults.title
+			title: defaults.title,
+			_GJTYPE: 'marker'
 		});
 		
 		settings.pointEventsCallback(tmpPoint,tmpIndex,defaults,tmpProperties);
@@ -218,7 +248,8 @@ window.GeoJSON = function(settings){
 			path: linestringCoords,
 			strokeColor: defaults.strokeColor,
 			strokeOpacity: defaults.strokeOpacity,
-			strokeWeight: defaults.strokeWeight
+			strokeWeight: defaults.strokeWeight,
+			_GJTYPE: 'line'
 		});
 		
 		linestringObj.setMap(settings.googleMap);
@@ -255,7 +286,8 @@ window.GeoJSON = function(settings){
 		    strokeOpacity: defaults.strokeOpacity,
 		    strokeWeight: defaults.strokeWeight,
 		    fillColor: defaults.fillColor,
-		    fillOpacity: defaults.fillOpacity
+		    fillOpacity: defaults.fillOpacity,
+		    _GJTYPE: 'polygon'
 		});
 		
 		

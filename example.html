@@ -55,7 +55,8 @@
 					});
 					google.maps.event.addListener(polygonpiece,'click',function(){
 						//MapGeoJSON[index].remove();
-						alert('State is '+props.NAME);
+						//alert('State is '+props.NAME);
+						map.fitBounds(MapGeoJSON.shapes[index].getBounds());
 					});
 				},
 				onError: function(index,message){

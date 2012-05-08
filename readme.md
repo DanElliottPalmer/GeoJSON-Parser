@@ -117,6 +117,7 @@ why I put this in.
 * `hide`: Hides all the pieces.
 * `show`: Shows all the pieces.
 * `remove`: Removes all the pieces.
+* `getBounds`: Returns a Google LatLngBounds object of the shape file.
 
 ##Help Me Please :)
 
