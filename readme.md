@@ -8,7 +8,7 @@
 
 `GeoJSON.loadJSON( url, onCompleteHandler )`: Loads a url pointing at a json/topojson file. onCompleteHandler returns the object.
 
-`GeoJSON.parse( jsonObject )`:
+`GeoJSON.parse( jsonObject )`: Parses the GeoJSON or TopoJSON file into GeoJsonFeature.
 
 ###GeoJsonFeature Instance
 
